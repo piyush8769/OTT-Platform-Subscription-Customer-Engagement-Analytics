@@ -1,28 +1,28 @@
 # OTT Platform Subscription & Customer Engagement Analytics
 
-A comprehensive data analytics project evaluating subscriber viewing behavior, subscription plan performance, and churn patterns across 995 subscribers using **Python (Pandas, NumPy)**, **MySQL**, and **Power BI (DAX)**.
+An end-to-end data analytics project analyzing subscriber behavior, plan performance, and churn patterns across 958 customers using Python (Pandas), MySQL, and Power BI.
 
 ---
 
 ## Project Overview
 
-In subscription streaming platforms, customer retention and viewing engagement are critical to long-term profitability. High churn rates directly erode subscription revenue and inflate customer acquisition costs.
+In subscription streaming platforms, customer retention and viewing engagement directly drive profitability. When users stop watching, churn follows shortly after.
 
-This project analyzes an end-to-end OTT customer dataset to answer four core business questions:
-1. **Who is churning?** How do active, cancelled, and paused subscribers differ in their monthly viewing habits?
-2. **Which plans drive revenue?** What is the customer distribution and revenue contribution across Basic, Standard, and Premium tiers?
-3. **What content keeps users engaged?** Which genres and content types (Movies vs. TV Shows) maintain the highest viewership and customer ratings?
-4. **How do users watch?** Which devices (Mobile, Smart TV, Laptop, Tablet) dominate streaming hours across different age groups?
+The goal of this project was to analyze raw viewing and subscription records to answer four core questions:
+1. **Who is churning?** How do active, cancelled, and paused accounts differ in their viewing habits?
+2. **Which plans drive revenue?** What is the subscriber count and revenue contribution across Basic, Standard, and Premium tiers?
+3. **What keeps users engaged?** Which genres and content types (Movies vs. TV Shows) hold the highest watch time and ratings?
+4. **Where are users watching?** Which devices (Mobile, Smart TV, Laptop, Tablet, Gaming Console) dominate streaming hours?
 
 ---
 
 ## Power BI Executive Dashboard
 
-The interactive Power BI report provides leadership with an operational view of key performance indicators, subscriber churn, device breakdown, and revenue contribution.
+An interactive dashboard built to give stakeholders a clear view of platform revenue, active subscribers, and engagement patterns across devices and regions.
 
 ![Netflix Data Analytics Dashboard](images/dashboard_overview.jpg)
 
-### Key Performance Indicator (KPI) Summary
+### Key Metrics Summary
 
 | Total Revenue | Total Subscribers | Active Customers |
 | :---: | :---: | :---: |
@@ -34,59 +34,37 @@ The interactive Power BI report provides leadership with an operational view of 
 
 ---
 
-## Key Findings & Business Insights
+## Key Insights & Takeaways
 
-- **Early Churn Indicator:** Subscribers who cancelled had an average monthly watch time approximately **40% lower** in their first month compared to active accounts, establishing low watch time (<15 hours/month) as an early indicator of churn risk.
-- **Plan Profitability:** The **Premium Plan** led total revenue generation with 347 subscribers, while maintaining cancellation rates comparable to the Basic tier.
-- **Device & Content Consumption:** Over **65% of all streaming hours** took place on Mobile Apps and Smart TVs, with Drama, Action, and Comedy driving the majority of watch hours.
-- **Demographics:** Subscribers in the 26–40 (Millennial) age cohort represented the largest customer base and logged the highest download counts for offline viewing.
-
----
-
-## Analytical Workflow
-
-```
-Raw Excel Data (OTT_Unclean_Project.xlsx)
-               │
-               ▼
-   [ Python / Pandas Cleaning ]
-   • Removed duplicate customer entries
-   • Replaced string placeholders ('N/A', 'NULL') with NaN
-   • Applied median imputation for watch hours and fees
-   • Filtered demographic outliers (Age 18-100)
-               │
-               ▼
-   [ Feature Engineering (pd.cut) ]
-   • Engagement Score (Watch Hours, Sessions, Ratings)
-   • Watch Categories (Low, Medium, High, Very High)
-   • Age Groups (18-25, 26-35, 36-50, 51+)
-   • Active Account Flag
-               │
-               ▼
-   [ MySQL Relational Storage ]
-   • Table: netflix_customers
-   • 12 Analytical SQL queries (ott_subscription_queries.sql)
-               │
-               ▼
-   [ Power BI Reporting ]
-   • Star Schema Modeling
-   • DAX Measures (CALCULATE, FILTER, COUNTROWS)
-   • 4-Row Executive Dashboard Layout
-```
+- **Early Churn Warning:** Customers who ended up cancelling watched roughly 40% less content in their first month compared to active users. Accounts logging under 15 hours a month are at immediate risk of churn.
+- **Plan Performance:** The **Premium Plan** brought in the highest overall revenue and volume (over 340 subscribers), while having churn rates on par with the lower-cost Basic tier.
+- **Where Users Stream:** Mobile and Smart TVs together drove over 65% of total watch hours. Optimizing mobile playback and TV app interfaces has the biggest direct impact on user experience.
+- **Paused Subscribers as an Opportunity:** Paused accounts make up 9.57% of total revenue (~₹672K). Targeting them with re-engagement emails before they convert to full cancellations is a low-cost retention win.
 
 ---
 
-## SQL Analysis
+## Analytical Steps
 
-The SQL script `ott_subscription_queries.sql` contains 12 business queries covering:
-- Subscriber status distribution (Active, Cancelled, Paused)
-- Plan-wise customer count and total revenue
-- Average watch hours by subscription tier
-- Genre-wise viewership and average ratings
-- Country-level adoption and device usage breakdown
-- Top 10 high-value customers by revenue contribution
+1. **Python & Pandas:**
+   - Handled duplicate customer records and converted placeholder text (`N/A`, `NULL`, blanks) to null values.
+   - Used median imputation for missing watch hours and monthly fees to prevent outlier distortion.
+   - Filtered out bad inputs (such as ages outside 18–100 and negative values).
+   - Created derived metrics: Customer Revenue, Engagement Scores, and demographic/watch-time brackets using `pd.cut`.
 
-Example query calculating revenue and volume by subscription plan:
+2. **MySQL Database Storage:**
+   - Loaded the sanitized dataset into MySQL as `netflix_customers`.
+   - Wrote 12 targeted business queries (`ott_subscription_queries.sql`) to summarize plan revenues, average watch time, device usage, and genre rankings.
+
+3. **Power BI Dashboard:**
+   - Built KPI scorecards, status breakdown donut charts, subscription plan bar charts, and a geographic country map.
+   - Added interactive slicers for device types (Mobile, Smart TV, Laptop, Tablet, Gaming Console).
+
+---
+
+## Sample SQL Analysis
+
+The `ott_subscription_queries.sql` file contains 12 queries. Here is an example calculating volume and revenue across subscription tiers:
+
 ```sql
 SELECT 
     Subscription_Plan, 
@@ -103,42 +81,18 @@ ORDER BY total_revenue DESC;
 ## Repository Structure
 
 ```
-├── docs/
-│   └── OTT_Project.pdf                   # Dashboard export & design reference
 ├── images/
 │   ├── dashboard_overview.jpg            # Full Power BI executive dashboard view
-│   ├── total_revenue.png                 # Power BI KPI: Total Revenue
-│   ├── total_customers.png               # Power BI KPI: Total Customers
-│   ├── active_customers.png              # Power BI KPI: Active Customers
-│   ├── average_watch_hours.png           # Power BI KPI: Average Watch Hours
-│   └── average_rating.png                # Power BI KPI: Average Rating
-├── OTT_Unclean_Project.xlsx              # Raw source dataset
-├── OTT_Clean_Data.csv                    # Sanitized dataset (995 rows, 25 columns)
-├── OTT_Platform.ipynb                    # End-to-end Python cleaning & feature engineering
-├── ott_subscription_queries.sql          # 12 analytical SQL business queries
-├── OTT_Platform_PowerBI.pbix             # Complete interactive Power BI dashboard
+│   ├── total_revenue.png                 # KPI: Total Revenue
+│   ├── total_customers.png               # KPI: Total Customers
+│   ├── active_customers.png              # KPI: Active Customers
+│   ├── average_watch_hours.png           # KPI: Average Watch Hours
+│   └── average_rating.png                # KPI: Average Rating
+├── OTT_Unclean_Project.xlsx              # Raw dataset
+├── OTT_Clean_Data.csv                    # Cleaned dataset (995 rows, 25 columns)
+├── OTT_Platform.ipynb                    # Data cleaning & feature engineering notebook
+├── ott_subscription_queries.sql          # 12 analytical SQL queries
+├── OTT_Platform_PowerBI.pbix             # Power BI dashboard file
 ├── .gitignore
 └── README.md
 ```
-
----
-
-## How to Run This Project
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/piyush8769/OTT-Platform-Subscription-Customer-Engagement-Analytics.git
-   cd OTT-Platform-Subscription-Customer-Engagement-Analytics
-   ```
-
-2. **Run the Jupyter Notebook:**
-   ```bash
-   jupyter notebook OTT_Platform.ipynb
-   ```
-
-3. **Execute SQL Queries:**
-   - Import `OTT_Clean_Data.csv` into your MySQL instance as `netflix_customers`.
-   - Run `ott_subscription_queries.sql`.
-
-4. **Open Dashboard:**
-   - Launch `OTT_Platform_PowerBI.pbix` in Microsoft Power BI Desktop to interact with the visualizations and filters.
