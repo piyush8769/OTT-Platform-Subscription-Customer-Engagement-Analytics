@@ -18,9 +18,11 @@ This project analyzes an end-to-end OTT customer dataset to answer four core bus
 
 ## Power BI Executive Dashboard
 
-The interactive Power BI report provides leadership with an operational view of key performance indicators, subscriber churn, and genre-level engagement.
+The interactive Power BI report provides leadership with an operational view of key performance indicators, subscriber churn, device breakdown, and revenue contribution.
 
-### Key Performance Indicator (KPI) Cards
+![Netflix Data Analytics Dashboard](images/dashboard_overview.jpg)
+
+### Key Performance Indicator (KPI) Summary
 
 | Total Revenue | Total Subscribers | Active Customers |
 | :---: | :---: | :---: |
@@ -104,6 +106,7 @@ ORDER BY total_revenue DESC;
 ├── docs/
 │   └── OTT_Project.pdf                   # Dashboard export & design reference
 ├── images/
+│   ├── dashboard_overview.jpg            # Full Power BI executive dashboard view
 │   ├── total_revenue.png                 # Power BI KPI: Total Revenue
 │   ├── total_customers.png               # Power BI KPI: Total Customers
 │   ├── active_customers.png              # Power BI KPI: Active Customers
